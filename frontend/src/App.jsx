@@ -10,6 +10,8 @@ function App() {
   // Vista Auth (login únicamente, registro bloqueado)
   const [authEmail, setAuthEmail] = useState('')
   const [authPassword, setAuthPassword] = useState('')
+  const [authName, setAuthName] = useState('')
+  const [isRegistering, setIsRegistering] = useState(false)
   const [authError, setAuthError] = useState(null)
 
   // Proyectos
@@ -111,6 +113,26 @@ function App() {
     setUser(authUser)
     setAuthEmail('')
     setAuthPassword('')
+    setAuthName('')
+  }
+
+  const handleRegister = async (e) => {
+    e.preventDefault()
+    setAuthError(null)
+    try {
+      const res = await fetch(`${API_URL}/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: authName, email: authEmail, password: authPassword })
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data.message || "Error al registrarse.")
+      }
+      saveSession(data.token, data.user)
+    } catch (err) {
+      setAuthError(err.message)
+    }
   }
 
   const handleLogoutLocal = () => {
@@ -416,7 +438,7 @@ function App() {
           </div>
 
           <div style={{ border: '2px solid var(--neon-cyan)', padding: '0.5rem', color: 'var(--neon-cyan)', textAlign: 'center', fontWeight: 'bold', marginBottom: '2rem', fontSize: '1rem', textTransform: 'uppercase' }}>
-            [ INICIAR SESIÓN ]
+            [ {isRegistering ? 'REGISTRAR NUEVO OPERADOR' : 'INICIAR SESIÓN'} ]
           </div>
 
           {authError && (
@@ -425,8 +447,22 @@ function App() {
             </div>
           )}
 
-          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+          <form onSubmit={isRegistering ? handleRegister : handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
             
+            {isRegistering && (
+              <div>
+                <label style={{ fontSize: '0.75rem', color: 'var(--neon-cyan)', display: 'block', marginBottom: '0.4rem', fontWeight: 'bold' }}>OPERADOR_NOMBRE</label>
+                <input 
+                  type="text" 
+                  placeholder="NOMBRE" 
+                  value={authName} 
+                  onChange={e => setAuthName(e.target.value)}
+                  style={{ width: '100%', padding: '0.8rem', background: '#000', border: '1px solid var(--text-dim)', color: '#fff', fontFamily: 'inherit', outline: 'none' }}
+                  required
+                />
+              </div>
+            )}
+
             <div>
               <label style={{ fontSize: '0.75rem', color: 'var(--neon-cyan)', display: 'block', marginBottom: '0.4rem', fontWeight: 'bold' }}>OPERADOR_EMAIL</label>
               <input 
@@ -454,7 +490,15 @@ function App() {
             </div>
 
             <button className="btn-brutal" type="submit" style={{ width: '100%', marginTop: '1rem', fontSize: '1.1rem' }}>
-              BOOTSTRAP SESIÓN
+              {isRegistering ? 'CREAR OPERADOR' : 'BOOTSTRAP SESIÓN'}
+            </button>
+            
+            <button 
+              type="button" 
+              onClick={() => { setIsRegistering(!isRegistering); setAuthError(null); }} 
+              style={{ background: 'none', border: 'none', color: 'var(--text-dim)', fontSize: '0.8rem', cursor: 'pointer', textDecoration: 'underline', marginTop: '0.5rem', fontFamily: 'inherit' }}
+            >
+              {isRegistering ? 'Ya tengo cuenta, quiero iniciar sesión' : 'No tengo cuenta, quiero registrarme'}
             </button>
 
           </form>
