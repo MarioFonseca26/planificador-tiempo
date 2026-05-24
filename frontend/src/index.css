@@ -1,0 +1,403 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Share+Tech+Mono&display=swap');
+
+:root {
+  --bg-base: #050505;
+  --bg-panel: #111111;
+  --neon-orange: #ff3300;
+  --neon-cyan: #00ffcc;
+  --text-main: #f0f0f0;
+  --text-dim: #666666;
+  --grid-color: rgba(255, 51, 0, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  font-family: 'Share Tech Mono', monospace;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background-image: 
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center center;
+}
+
+/* CRT Scanline Overlay */
+body::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.18) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+h1, h2, h3, h4, .display-font {
+  font-family: 'Audiowide', cursive;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+}
+
+/* Industrial Panel */
+.panel {
+  background: var(--bg-panel);
+  border: 2px solid var(--text-dim);
+  box-shadow: 6px 6px 0px var(--neon-orange);
+  position: relative;
+  transition: all 0.2s ease-out;
+}
+
+.panel:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 8px 8px 0px var(--neon-cyan);
+  border-color: var(--neon-cyan);
+}
+
+/* Decorative corners */
+.panel::before, .panel::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--neon-orange);
+  z-index: 2;
+}
+.panel::before { top: -2px; left: -2px; }
+.panel::after { bottom: -2px; right: -2px; }
+
+/* Brutalist Button */
+.btn-brutal {
+  font-family: 'Audiowide', cursive;
+  background: transparent;
+  color: var(--neon-orange);
+  border: 2px solid var(--neon-orange);
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.1s;
+}
+
+.btn-brutal:hover {
+  background: var(--neon-orange);
+  color: var(--bg-base);
+  box-shadow: 0 0 15px var(--neon-orange);
+}
+
+.btn-brutal:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+/* Glitch */
+@keyframes glitch {
+  0% { text-shadow: 0.05em 0 0 var(--neon-orange), -0.05em -0.025em 0 var(--neon-cyan), -0.025em 0.05em 0 #fff; }
+  14% { text-shadow: 0.05em 0 0 var(--neon-orange), -0.05em -0.025em 0 var(--neon-cyan), -0.025em 0.05em 0 #fff; }
+  15% { text-shadow: -0.05em -0.025em 0 var(--neon-orange), 0.025em 0.025em 0 var(--neon-cyan), -0.05em -0.05em 0 #fff; }
+  49% { text-shadow: -0.05em -0.025em 0 var(--neon-orange), 0.025em 0.025em 0 var(--neon-cyan), -0.05em -0.05em 0 #fff; }
+  50% { text-shadow: 0.025em 0.05em 0 var(--neon-orange), 0.05em 0 0 var(--neon-cyan), 0 -0.05em 0 #fff; }
+  99% { text-shadow: 0.025em 0.05em 0 var(--neon-orange), 0.05em 0 0 var(--neon-cyan), 0 -0.05em 0 #fff; }
+  100% { text-shadow: -0.025em 0 0 var(--neon-orange), -0.025em -0.025em 0 var(--neon-cyan), -0.025em -0.05em 0 #fff; }
+}
+
+.glitch-text {
+  animation: glitch 1s linear infinite;
+}
+
+/* Marquee */
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  border-bottom: 2px dashed var(--neon-cyan);
+  border-top: 2px dashed var(--neon-cyan);
+  padding: 0.5rem 0;
+  background: rgba(0, 255, 204, 0.04);
+}
+.marquee {
+  display: inline-block;
+  animation: marquee 20s linear infinite;
+  color: var(--neon-cyan);
+  font-weight: bold;
+}
+@keyframes marquee {
+  0% { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
+}
+
+/* ==================== ESTRUCTURA DE DISEÑO RESPONSIVO ==================== */
+
+.app-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.sidebar {
+  border-right: 3px solid var(--text-dim);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background: #09090b;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 100vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
+/* Header Panel */
+.header-panel {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 2rem;
+  align-items: center;
+}
+
+.header-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.header-title {
+  font-size: 2.5rem;
+  margin: 0;
+  letter-spacing: -2px;
+  color: #fff;
+  line-height: 1.1;
+  word-break: break-word;
+}
+
+.timer-section {
+  border-left: 2px dashed var(--text-dim);
+  padding-left: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.timer-display {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+
+/* No Active Project */
+.no-project-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  border-style: dashed;
+}
+
+.no-project-title {
+  font-size: 3rem;
+  color: var(--neon-orange);
+  margin-bottom: 1rem;
+}
+
+/* Kanban */
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  flex: 1;
+  min-height: 450px;
+}
+
+.kanban-column {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: #0c0c0e;
+  border: 2px dashed var(--text-dim);
+  transition: all 0.2s;
+}
+
+.mobile-toggle-btn {
+  display: none;
+}
+
+/* ==================== MEDIA QUERIES PARA ADAPTABILIDAD MÓVIL ==================== */
+
+@media (max-width: 1024px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+    position: relative;
+  }
+
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 300px;
+    height: 100vh;
+    transform: translateX(-100%);
+    box-shadow: 10px 0 30px rgba(0,0,0,0.85);
+    z-index: 999;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    z-index: 998;
+  }
+
+  .main-content {
+    padding: 1rem;
+    height: auto;
+    overflow-y: visible;
+  }
+
+  /* Rediseño de cabecera responsiva */
+  .header-panel {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .header-title {
+    font-size: 1.8rem;
+    letter-spacing: -1px;
+  }
+
+  .timer-section {
+    border-left: none;
+    border-top: 2px dashed var(--text-dim);
+    padding-left: 0;
+    padding-top: 1.5rem;
+    width: 100%;
+  }
+
+  .timer-display {
+    font-size: 2.3rem;
+  }
+
+  .no-project-panel {
+    padding: 2.5rem 1rem;
+  }
+
+  .no-project-title {
+    font-size: 1.8rem;
+    word-break: break-word;
+  }
+
+  /* Kanban deslizable horizontalmente en móviles */
+  .kanban-board {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1.5rem;
+    min-height: 500px;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
+
+  .kanban-column {
+    min-width: 280px;
+    max-width: 310px;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    height: 550px;
+    overflow-y: auto;
+  }
+
+  .mobile-toggle-btn {
+    display: inline-flex;
+    font-family: 'Audiowide', cursive;
+    background: #000;
+    color: var(--neon-cyan);
+    border: 2px solid var(--neon-cyan);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    gap: 0.5rem;
+    align-items: center;
+    text-transform: uppercase;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-title {
+    font-size: 1.5rem;
+  }
+  
+  .timer-display {
+    font-size: 2rem;
+  }
+
+  .main-content {
+    padding: 0.8rem;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+  border-left: 1px solid var(--text-dim);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--neon-orange);
+}

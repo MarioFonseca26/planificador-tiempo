@@ -1,0 +1,23 @@
+# Carpetas de editores e IDEs a nivel raíz
+.vscode/
+.idea/
+.zed/
+.DS_Store
+Thumbs.db
+
+# Logs comunes
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Archivos de configuración locales sensibles (seguridad)
+**/env
+**/.env
+**/.env.*.local
+
+# Dependencias locales (por si se instalan en la raíz por error)
+node_modules/
+vendor/
+dist/
